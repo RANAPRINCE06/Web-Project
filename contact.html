@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Swastik Transport Pvt. Ltd.</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="https://via.placeholder.com/40/1e3c72/ffffff?text=ST" alt="Swastik Transport Logo">
+                <span>Swastik Transport</span>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="transport.html">Transport</a></li>
+                    <li><a href="jobs.html">Careers</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contact Hero -->
+    <section class="hero" style="height: 60vh; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://via.placeholder.com/1200x600/1e3c72/ffffff?text=Contact+Us') center/cover;">
+        <div class="hero-content">
+            <h1>Contact Us</h1>
+            <p>Get in touch with our team for all your logistics needs</p>
+        </div>
+    </section>
+
+    <!-- Contact Information -->
+    <section class="section">
+        <h2>Get In Touch</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h3>Head Office</h3>
+                <p>
+                    Swastik Transport Pvt. Ltd.<br>
+                    123 Logistics Hub, Sector 18<br>
+                    Gurgaon, Haryana - 122015<br>
+                    India
+                </p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <h3>Phone Numbers</h3>
+                <p>
+                    <strong>Customer Service:</strong><br>
+                    +91 124 456 7890<br>
+                    <strong>Sales Enquiry:</strong><br>
+                    +91 124 456 7891<br>
+                    <strong>Emergency:</strong><br>
+                    +91 98765 43210
+                </p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3>Email Addresses</h3>
+                <p>
+                    <strong>General Enquiry:</strong><br>
+                    info@swastiktransport.com<br>
+                    <strong>Sales:</strong><br>
+                    sales@swastiktransport.com<br>
+                    <strong>Support:</strong><br>
+                    support@swastiktransport.com
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="section" style="background: #f8f9fa; margin: 0 -2rem; padding: 80px 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2>Send Us a Message</h2>
+            <div class="form-container">
+                <form id="contactForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="contactName">Full Name</label>
+                            <input type="text" id="contactName" name="contactName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail">Email</label>
+                            <input type="email" id="contactEmail" name="contactEmail" required>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="contactPhone">Phone</label>
+                            <input type="tel" id="contactPhone" name="contactPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactSubject">Subject</label>
+                            <select id="contactSubject" name="contactSubject" required>
+                                <option value="">Select Subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="quote">Request Quote</option>
+                                <option value="complaint">Complaint</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="partnership">Partnership</option>
+                                <option value="careers">Careers</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactCompany">Company Name (Optional)</label>
+                        <input type="text" id="contactCompany" name="contactCompany">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactMessage">Message</label>
+                        <textarea id="contactMessage" name="contactMessage" rows="6" placeholder="Please describe your inquiry in detail..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="contactConsent" name="contactConsent" required style="width: auto; margin-right: 0.5rem;">
+                            I agree to the processing of my personal data for the purpose of responding to my inquiry.
+                        </label>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+                <div id="contactResult"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Branch Offices -->
+    <section class="section">
+        <h2>Our Branch Offices</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Mumbai Branch</h3>
+                <p>
+                    <i class="fas fa-map-marker-alt" style="color: #1e3c72; margin-right: 0.5rem;"></i>
+                    456 Transport Street, Andheri East<br>
+                    Mumbai, Maharashtra - 400069<br><br>
+                    <i class="fas fa-phone" style="color: #1e3c72; margin-right: 0.5rem;"></i>
+                    +91 22 2345 6789<br>
+                    <i class="fas fa-envelope" style="color: #1e3c72; margin-right: 0.5rem;"></i>
+                    mumbai@swastiktransport.com
+                </p>
+            </div>
+            <div class="service-card">
+                <h3>Delhi Branch</h3>
+                <p>
+                    <i class="fas fa-map-marker-alt" style="color: #1e3c72; margin-right: 0.5rem;"></i>
+                    789 Logistics Avenue, Dwarka<br>
+                    New Delhi - 110075<br><br>
+                    <i class="fas fa-phone" style="color: #1e3c72; margin-right: 0.5rem;"></i>
+                    +91 11 3456 7890<br>
+                    <i class="fas fa-envelope" style="color: #1e3c72; margin-right: 0.5rem;"></i>
+                    delhi@swastiktransport.com
+                </p>
+            </div>
+            <div class="service-card">
+                <h3>Bangalore Branch</h3>
+                <p>
+                    <i class="fas fa-map-marker-alt" style="color: #1e3c72; margin-right: 0.5rem;"></i>
+                    321 Tech Park Road, Electronic City<br>
+                    Bangalore, Karnataka - 560100<br><br>
+                    <i class="fas fa-phone" style="color: #1e3c72; margin-right: 0.5rem;"></i>
+                    +91 80 4567 8901<br>
+                    <i class="fas fa-envelope" style="color: #1e3c72; margin-right: 0.5rem;"></i>
+                    bangalore@swastiktransport.com
+                </p>
+            </div>
+            <div class="service-card">
+                <h3>Chennai Branch</h3>
+                <p>
+                    <i class="fas fa-map-marker-alt" style="color: #1e3c72; margin-right: 0.5rem;"></i>
+                    654 Industrial Estate, Guindy<br>
+                    Chennai, Tamil Nadu - 600032<br><br>
+                    <i class="fas fa-phone" style="color: #1e3c72; margin-right: 0.5rem;"></i>
+                    +91 44 5678 9012<br>
+                    <i class="fas fa-envelope" style="color: #1e3c72; margin-right: 0.5rem;"></i>
+                    chennai@swastiktransport.com
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Hours -->
+    <section class="section" style="background: #f8f9fa; margin: 0 -2rem; padding: 80px 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2>Business Hours</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Customer Service</h3>
+                    <p>
+                        <strong>Monday - Friday:</strong> 9:00 AM - 7:00 PM<br>
+                        <strong>Saturday:</strong> 9:00 AM - 5:00 PM<br>
+                        <strong>Sunday:</strong> 10:00 AM - 4:00 PM
+                    </p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Operations</h3>
+                    <p>
+                        <strong>24/7 Operations</strong><br>
+                        Our fleet operates round the clock<br>
+                        Emergency support available<br>
+                        Real-time tracking available
+                    </p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Emergency Support</h3>
+                    <p>
+                        <strong>24/7 Emergency Hotline</strong><br>
+                        +91 98765 43210<br>
+                        For urgent shipment issues<br>
+                        Immediate assistance guaranteed
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="section">
+        <h2>Find Us</h2>
+        <div style="background: #e9ecef; padding: 2rem; border-radius: 15px; text-align: center;">
+            <div style="background: #fff; padding: 3rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                <i class="fas fa-map" style="font-size: 4rem; color: #1e3c72; margin-bottom: 1rem;"></i>
+                <h3>Interactive Map</h3>
+                <p>Visit our head office at Gurgaon for in-person consultations and business meetings.</p>
+                <p><strong>Address:</strong> 123 Logistics Hub, Sector 18, Gurgaon, Haryana - 122015</p>
+                <a href="https://maps.google.com" target="_blank" class="cta-button" style="display: inline-block; margin-top: 1rem;">View on Google Maps</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Swastik Transport Pvt. Ltd. All rights reserved. | Excellence in Logistics</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

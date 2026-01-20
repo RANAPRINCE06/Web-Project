@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport & Load Booking - Swastik Transport Pvt. Ltd.</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="https://via.placeholder.com/40/1e3c72/ffffff?text=ST" alt="Swastik Transport Logo">
+                <span>Swastik Transport</span>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="transport.html">Transport</a></li>
+                    <li><a href="jobs.html">Careers</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Transport Hero -->
+    <section class="hero" style="height: 60vh; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://via.placeholder.com/1200x600/1e3c72/ffffff?text=Transport+Services') center/cover;">
+        <div class="hero-content">
+            <h1>Transport & Load Management</h1>
+            <p>Book your transport, track your shipments, and manage your logistics efficiently</p>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="section">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+            <div class="service-card" onclick="showSection('booking')">
+                <div class="service-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <h3>Book Transport</h3>
+                <p>Schedule your shipment with our easy booking system</p>
+            </div>
+            <div class="service-card" onclick="showSection('tracking')">
+                <div class="service-icon">
+                    <i class="fas fa-search-location"></i>
+                </div>
+                <h3>Track Shipment</h3>
+                <p>Real-time tracking of your cargo and delivery status</p>
+            </div>
+            <div class="service-card" onclick="showSection('calculator')">
+                <div class="service-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h3>Price Calculator</h3>
+                <p>Get instant quotes for your transport requirements</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking-section" class="section" style="display: block;">
+        <h2>Book Your Transport</h2>
+        <div class="form-container">
+            <form id="transportBookingForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="senderName">Sender Name</label>
+                        <input type="text" id="senderName" name="senderName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="senderPhone">Sender Phone</label>
+                        <input type="tel" id="senderPhone" name="senderPhone" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="pickupAddress">Pickup Address</label>
+                    <textarea id="pickupAddress" name="pickupAddress" rows="2" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="deliveryAddress">Delivery Address</label>
+                    <textarea id="deliveryAddress" name="deliveryAddress" rows="2" required></textarea>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="cargoWeight">Weight (kg)</label>
+                        <input type="number" id="cargoWeight" name="cargoWeight" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cargoType">Cargo Type</label>
+                        <select id="cargoType" name="cargoType" required>
+                            <option value="">Select Type</option>
+                            <option value="general">General Cargo</option>
+                            <option value="fragile">Fragile Items</option>
+                            <option value="perishable">Perishable Goods</option>
+                            <option value="hazardous">Hazardous Materials</option>
+                            <option value="electronics">Electronics</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="vehicleType">Vehicle Type</label>
+                        <select id="vehicleType" name="vehicleType" required>
+                            <option value="">Select Vehicle</option>
+                            <option value="mini-truck">Mini Truck (1-2 tons)</option>
+                            <option value="medium-truck">Medium Truck (3-7 tons)</option>
+                            <option value="large-truck">Large Truck (8-15 tons)</option>
+                            <option value="trailer">Trailer (16+ tons)</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="pickupDate">Pickup Date</label>
+                        <input type="date" id="pickupDate" name="pickupDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryType">Delivery Type</label>
+                        <select id="deliveryType" name="deliveryType" required>
+                            <option value="">Select Type</option>
+                            <option value="standard">Standard (3-5 days)</option>
+                            <option value="express">Express (1-2 days)</option>
+                            <option value="overnight">Overnight</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="specialInstructions">Special Instructions</label>
+                    <textarea id="specialInstructions" name="specialInstructions" rows="3" placeholder="Any special handling requirements..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Book Transport</button>
+            </form>
+            <div id="bookingResult"></div>
+        </div>
+    </section>
+
+    <!-- Tracking Section -->
+    <section id="tracking-section" class="section" style="display: none;">
+        <h2>Track Your Shipment</h2>
+        <div class="form-container">
+            <form id="trackingForm">
+                <div class="form-group">
+                    <label for="trackingNumber">Tracking Number</label>
+                    <input type="text" id="trackingNumber" name="trackingNumber" placeholder="Enter your tracking number" required>
+                </div>
+                <button type="submit" class="submit-btn">Track Shipment</button>
+            </form>
+            <div id="trackingResult"></div>
+        </div>
+    </section>
+
+    <!-- Price Calculator Section -->
+    <section id="calculator-section" class="section" style="display: none;">
+        <h2>Transport Price Calculator</h2>
+        <div class="form-container">
+            <form id="calculatorForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="calcFrom">From City</label>
+                        <input type="text" id="calcFrom" name="calcFrom" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="calcTo">To City</label>
+                        <input type="text" id="calcTo" name="calcTo" required>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="calcWeight">Weight (kg)</label>
+                        <input type="number" id="calcWeight" name="calcWeight" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="calcVehicle">Vehicle Type</label>
+                        <select id="calcVehicle" name="calcVehicle" required>
+                            <option value="">Select Vehicle</option>
+                            <option value="mini-truck">Mini Truck</option>
+                            <option value="medium-truck">Medium Truck</option>
+                            <option value="large-truck">Large Truck</option>
+                            <option value="trailer">Trailer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="calcService">Service Type</label>
+                        <select id="calcService" name="calcService" required>
+                            <option value="">Select Service</option>
+                            <option value="standard">Standard</option>
+                            <option value="express">Express</option>
+                            <option value="overnight">Overnight</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">Calculate Price</button>
+            </form>
+            <div id="calculatorResult"></div>
+        </div>
+    </section>
+
+    <!-- Fleet Information -->
+    <section class="section" style="background: #f8f9fa; margin: 0 -2rem; padding: 80px 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2>Our Fleet</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Mini Trucks</h3>
+                    <p>Perfect for small loads (1-2 tons)</p>
+                    <ul style="text-align: left; margin-top: 1rem;">
+                        <li>City deliveries</li>
+                        <li>Last-mile delivery</li>
+                        <li>Small packages</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3>Medium Trucks</h3>
+                    <p>Ideal for medium loads (3-7 tons)</p>
+                    <ul style="text-align: left; margin-top: 1rem;">
+                        <li>Regional transport</li>
+                        <li>Furniture moving</li>
+                        <li>Commercial goods</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-truck-moving"></i>
+                    </div>
+                    <h3>Large Trucks</h3>
+                    <p>Heavy-duty transport (8-15 tons)</p>
+                    <ul style="text-align: left; margin-top: 1rem;">
+                        <li>Industrial goods</li>
+                        <li>Construction materials</li>
+                        <li>Bulk shipments</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-trailer"></i>
+                    </div>
+                    <h3>Trailers</h3>
+                    <p>Maximum capacity (16+ tons)</p>
+                    <ul style="text-align: left; margin-top: 1rem;">
+                        <li>Long-distance transport</li>
+                        <li>Heavy machinery</li>
+                        <li>Container transport</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Swastik Transport Pvt. Ltd. All rights reserved. | Excellence in Logistics</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        function showSection(sectionName) {
+            // Hide all sections
+            document.getElementById('booking-section').style.display = 'none';
+            document.getElementById('tracking-section').style.display = 'none';
+            document.getElementById('calculator-section').style.display = 'none';
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').style.display = 'block';
+            
+            // Scroll to section
+            document.getElementById(sectionName + '-section').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

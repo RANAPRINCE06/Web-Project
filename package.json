@@ -1,0 +1,49 @@
+{
+  "name": "swastik-transport-website",
+  "version": "1.0.0",
+  "description": "Complete transport and logistics website with backend and database",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "install-deps": "npm install",
+    "setup": "npm install && node setup-db.js"
+  },
+  "keywords": [
+    "transport",
+    "logistics",
+    "website",
+    "nodejs",
+    "express",
+    "sqlite"
+  ],
+  "author": "Swastik Transport Pvt. Ltd.",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "multer": "^1.4.5-lts.1",
+    "sqlite3": "^5.1.6",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "dotenv": "^16.3.1",
+    "helmet": "^7.0.0",
+    "express-rate-limit": "^6.10.0",
+    "compression": "^1.7.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/swastik-transport/website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/swastik-transport/website/issues"
+  },
+  "homepage": "https://swastiktransport.com"
+}

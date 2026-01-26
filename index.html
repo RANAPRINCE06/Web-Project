@@ -12,7 +12,7 @@
     <header class="header">
         <div class="nav-container">
             <div class="logo">
-                <img src="https://tse4.mm.bing.net/th/id/OIP.sWheP8enol7ZOX8iVXlF6gAAAA?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Swastik Transport Logo">
+                <img src="logo.png" alt="Swastik Transport Logo">
                 <span>Swastik Transport</span>
             </div>
             <nav>
@@ -23,6 +23,41 @@
                     <li><a href="transport.html">Transport</a></li>
                     <li><a href="jobs.html">Careers</a></li>
                     <li><a href="contact.html">Contact</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li id="userProfile" style="display: none; position: relative;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;" onclick="toggleProfileDropdown()">
+                            <img id="userProfilePic" src="" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
+                            <span id="userName"></span>
+                            <i class="fas fa-chevron-down" style="font-size: 0.8rem; margin-left: 0.5rem;"></i>
+                        </div>
+                        <!-- Profile Dropdown -->
+                        <div id="profileDropdown" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 200px; z-index: 1001;">
+                            <div style="padding: 1rem; border-bottom: 1px solid #eee;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <img id="dropdownProfilePic" src="" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                                    <div>
+                                        <div id="dropdownUserName" style="font-weight: bold; color: #333;"></div>
+                                        <div id="dropdownUserEmail" style="font-size: 0.8rem; color: #666;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding: 0.5rem 0;">
+                                <a href="#" onclick="viewProfile()" style="display: block; padding: 0.5rem 1rem; color: #333; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                                    <i class="fas fa-user" style="margin-right: 0.5rem;"></i> View Profile
+                                </a>
+                                <a href="#" onclick="editProfile()" style="display: block; padding: 0.5rem 1rem; color: #333; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                                    <i class="fas fa-edit" style="margin-right: 0.5rem;"></i> Edit Profile
+                                </a>
+                                <a href="#" onclick="accountSettings()" style="display: block; padding: 0.5rem 1rem; color: #333; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                                    <i class="fas fa-cog" style="margin-right: 0.5rem;"></i> Settings
+                                </a>
+                                <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #eee;">
+                                <a href="#" onclick="logout()" style="display: block; padding: 0.5rem 1rem; color: #dc3545; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                                    <i class="fas fa-sign-out-alt" style="margin-right: 0.5rem;"></i> Logout
+                                </a>
+                            </div>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -32,7 +67,7 @@
     <section class="hero">
         <div class="hero-content">
             <h1>Premium Transport Solutions</h1>
-            <p>Delivering excellence across the nation with our state-of-the-art logistics network. Your cargo, our commitment.</p>
+            <p style="margin-left: 100px;">Delivering excellence across the nation with our state-of-the-art logistics network. Your cargo, our commitment.</p>
             <a href="services.html" class="cta-button">Explore Our Services</a>
         </div>
     </section>
@@ -71,11 +106,11 @@
                 <h4>Modern Fleet</h4>
             </div>
             <div class="image-card">
-                <img src="https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop" alt="Warehouse">
+                <img src="data:image/jpeg;base64,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" alt="Warehouse">
                 <h4>Advanced Warehousing</h4>
             </div>
             <div class="image-card">
-                <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop" alt="Logistics">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgRbObWMym_-RxnWeGuVI4hl4m50epETfQEA&s" alt="Logistics">
                 <h4>Express Delivery</h4>
             </div>
         </div>
@@ -115,7 +150,79 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2024 Swastik Transport Pvt. Ltd. All rights reserved. | Excellence in Logistics</p>
+        <div style="max-width: 1200px; margin: 0 auto; padding: 3rem 2rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <!-- Company Info -->
+                <div>
+                    <h4 style="color: #ffd700; margin-bottom: 1rem;">Swastik Transport</h4>
+                    <p style="margin-bottom: 0.5rem;">Excellence in Logistics Since 1995</p>
+                    <p style="margin-bottom: 0.5rem;">📍 123 Logistics Hub, Gurgaon</p>
+                    <p style="margin-bottom: 0.5rem;">📞 +91 124 456 7890</p>
+                    <p>✉️ info@swastiktransport.com</p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 style="color: #ffd700; margin-bottom: 1rem;">Quick Links</h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <a href="about.html" style="color: white; text-decoration: none;">About Us</a>
+                        <a href="services.html" style="color: white; text-decoration: none;">Our Services</a>
+                        <a href="transport.html" style="color: white; text-decoration: none;">Book Transport</a>
+                        <a href="jobs.html" style="color: white; text-decoration: none;">Careers</a>
+                        <a href="contact.html" style="color: white; text-decoration: none;">Contact Us</a>
+                    </div>
+                </div>
+                
+                <!-- Services -->
+                <div>
+                    <h4 style="color: #ffd700; margin-bottom: 1rem;">Services</h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <a href="services.html#road-transport" style="color: white; text-decoration: none;">Road Transport</a>
+                        <a href="services.html#warehousing" style="color: white; text-decoration: none;">Warehousing</a>
+                        <a href="services.html#express-delivery" style="color: white; text-decoration: none;">Express Delivery</a>
+                        <a href="services.html#international" style="color: white; text-decoration: none;">International Shipping</a>
+                        <a href="transport.html#tracking" style="color: white; text-decoration: none;">Track Shipment</a>
+                    </div>
+                </div>
+                
+                <!-- Legal & Support -->
+                <div>
+                    <h4 style="color: #ffd700; margin-bottom: 1rem;">Support</h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <a href="#" style="color: white; text-decoration: none;">Privacy Policy</a>
+                        <a href="#" style="color: white; text-decoration: none;">Terms of Service</a>
+                        <a href="#" style="color: white; text-decoration: none;">Shipping Policy</a>
+                        <a href="#" style="color: white; text-decoration: none;">FAQ</a>
+                        <a href="contact.html" style="color: white; text-decoration: none;">Customer Support</a>
+                    </div>
+                </div>
+            </div>
+            
+            <hr style="border: 1px solid #ffd700; margin: 2rem 0;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <p>&copy; 2026 Swastik Transport Pvt. Ltd. All rights reserved. | Excellence in Logistics</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="https://facebook.com/swastiktransport" target="_blank" style="color: #ffd700; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://twitter.com/swastiktransport" target="_blank" style="color: #ffd700; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://linkedin.com/company/swastiktransport" target="_blank" style="color: #ffd700; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://instagram.com/swastiktransport" target="_blank" style="color: #ffd700; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://youtube.com/swastiktransport" target="_blank" style="color: #ffd700; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
     </footer>
 
     <script src="script.js"></script>

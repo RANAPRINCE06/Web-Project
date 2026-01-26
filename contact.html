@@ -12,7 +12,7 @@
     <header class="header">
         <div class="nav-container">
             <div class="logo">
-                <img src="https://tse4.mm.bing.net/th/id/OIP.sWheP8enol7ZOX8iVXlF6gAAAA?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Swastik Transport Logo">
+                <img src="logo.png" alt="Swastik Transport Logo">
                 <span>Swastik Transport</span>
             </div>
             <nav>
@@ -23,6 +23,41 @@
                     <li><a href="transport.html">Transport</a></li>
                     <li><a href="jobs.html">Careers</a></li>
                     <li><a href="contact.html">Contact</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li id="userProfile" style="display: none; position: relative;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;" onclick="toggleProfileDropdown()">
+                            <img id="userProfilePic" src="" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
+                            <span id="userName"></span>
+                            <i class="fas fa-chevron-down" style="font-size: 0.8rem; margin-left: 0.5rem;"></i>
+                        </div>
+                        <!-- Profile Dropdown -->
+                        <div id="profileDropdown" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 200px; z-index: 1001;">
+                            <div style="padding: 1rem; border-bottom: 1px solid #eee;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <img id="dropdownProfilePic" src="" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                                    <div>
+                                        <div id="dropdownUserName" style="font-weight: bold; color: #333;"></div>
+                                        <div id="dropdownUserEmail" style="font-size: 0.8rem; color: #666;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding: 0.5rem 0;">
+                                <a href="#" onclick="viewProfile()" style="display: block; padding: 0.5rem 1rem; color: #333; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                                    <i class="fas fa-user" style="margin-right: 0.5rem;"></i> View Profile
+                                </a>
+                                <a href="#" onclick="editProfile()" style="display: block; padding: 0.5rem 1rem; color: #333; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                                    <i class="fas fa-edit" style="margin-right: 0.5rem;"></i> Edit Profile
+                                </a>
+                                <a href="#" onclick="accountSettings()" style="display: block; padding: 0.5rem 1rem; color: #333; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                                    <i class="fas fa-cog" style="margin-right: 0.5rem;"></i> Settings
+                                </a>
+                                <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid #eee;">
+                                <a href="#" onclick="logout()" style="display: block; padding: 0.5rem 1rem; color: #dc3545; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                                    <i class="fas fa-sign-out-alt" style="margin-right: 0.5rem;"></i> Logout
+                                </a>
+                            </div>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -39,7 +74,7 @@
     <!-- Contact Information -->
     <section class="section">
         <h2>Get In Touch</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+        <div style="display: flex; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
             <div class="service-card">
                 <div class="service-icon">
                     <i class="fas fa-map-marker-alt"></i>
@@ -84,7 +119,7 @@
     </section>
 
     <!-- Contact Form -->
-    <section class="section" style="background: #f8f9fa; margin: 0; padding: 80px 2rem; width: 100vw; margin-left: calc(-50vw + 50%);">
+    <section class="section" style="background: #f8f9fa; margin: 0; padding: 80px 2rem; width: 100vw; margin-left: calc(-50vw + 50%);margin-left: 160px;border-radius: 10px;">
         <div class="section-content">
             <h2>Send Us a Message</h2>
             <div class="form-container">
@@ -194,7 +229,7 @@
     </section>
 
     <!-- Business Hours -->
-    <section class="section" style="background: #f8f9fa; margin: 0; padding: 80px 2rem; width: 100vw; margin-left: calc(-50vw + 50%);">
+    <section class="section" style="background: #f8f9fa; margin: 0; padding: 80px 2rem; width: 100vw; margin-left: calc(-50vw + 50%);margin-left: 160px;border-radius: 10px;">
         <div class="section-content">
             <h2>Business Hours</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; width: 100%; max-width: 1200px;">
@@ -258,7 +293,79 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2024 Swastik Transport Pvt. Ltd. All rights reserved. | Excellence in Logistics</p>
+        <div style="max-width: 1200px; margin: 0 auto; padding: 3rem 2rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <!-- Company Info -->
+                <div>
+                    <h4 style="color: #ffd700; margin-bottom: 1rem;">Swastik Transport</h4>
+                    <p style="margin-bottom: 0.5rem;">Excellence in Logistics Since 1995</p>
+                    <p style="margin-bottom: 0.5rem;">📍 123 Logistics Hub, Gurgaon</p>
+                    <p style="margin-bottom: 0.5rem;">📞 +91 124 456 7890</p>
+                    <p>✉️ info@swastiktransport.com</p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 style="color: #ffd700; margin-bottom: 1rem;">Quick Links</h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <a href="about.html" style="color: white; text-decoration: none;">About Us</a>
+                        <a href="services.html" style="color: white; text-decoration: none;">Our Services</a>
+                        <a href="transport.html" style="color: white; text-decoration: none;">Book Transport</a>
+                        <a href="jobs.html" style="color: white; text-decoration: none;">Careers</a>
+                        <a href="contact.html" style="color: white; text-decoration: none;">Contact Us</a>
+                    </div>
+                </div>
+                
+                <!-- Services -->
+                <div>
+                    <h4 style="color: #ffd700; margin-bottom: 1rem;">Services</h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <a href="services.html#road-transport" style="color: white; text-decoration: none;">Road Transport</a>
+                        <a href="services.html#warehousing" style="color: white; text-decoration: none;">Warehousing</a>
+                        <a href="services.html#express-delivery" style="color: white; text-decoration: none;">Express Delivery</a>
+                        <a href="services.html#international" style="color: white; text-decoration: none;">International Shipping</a>
+                        <a href="transport.html#tracking" style="color: white; text-decoration: none;">Track Shipment</a>
+                    </div>
+                </div>
+                
+                <!-- Legal & Support -->
+                <div>
+                    <h4 style="color: #ffd700; margin-bottom: 1rem;">Support</h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <a href="#" style="color: white; text-decoration: none;">Privacy Policy</a>
+                        <a href="#" style="color: white; text-decoration: none;">Terms of Service</a>
+                        <a href="#" style="color: white; text-decoration: none;">Shipping Policy</a>
+                        <a href="#" style="color: white; text-decoration: none;">FAQ</a>
+                        <a href="contact.html" style="color: white; text-decoration: none;">Customer Support</a>
+                    </div>
+                </div>
+            </div>
+            
+            <hr style="border: 1px solid #ffd700; margin: 2rem 0;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <p>&copy; 2026 Swastik Transport Pvt. Ltd. All rights reserved. | Excellence in Logistics</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="https://facebook.com/swastiktransport" target="_blank" style="color: #ffd700; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://twitter.com/swastiktransport" target="_blank" style="color: #ffd700; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://linkedin.com/company/swastiktransport" target="_blank" style="color: #ffd700; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://instagram.com/swastiktransport" target="_blank" style="color: #ffd700; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://youtube.com/swastiktransport" target="_blank" style="color: #ffd700; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
     </footer>
 
     <script src="script.js"></script>

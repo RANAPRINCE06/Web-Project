@@ -51,14 +51,20 @@ const upload = multer({
 });
 
 // Initialize SQLite database
-const db = new sqlite3.Database('./transport.db', (err) => {
-    if (err) {
-        console.error('Error opening database:', err.message);
-    } else {
-        console.log('Connected to SQLite database');
-        initializeDatabase();
-    }
-});
+let db;
+try {
+    db = new sqlite3.Database('./transport.db', (err) => {
+        if (err) {
+            console.error('Error opening database:', err.message);
+        } else {
+            console.log('Connected to SQLite database');
+            initializeDatabase();
+        }
+    });
+} catch (error) {
+    console.error('Database connection failed:', error);
+    process.exit(1);
+}
 
 // Initialize database tables
 function initializeDatabase() {
@@ -157,10 +163,13 @@ function initializeDatabase() {
     // Users table (for admin panel)
     db.run(`CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE NOT NULL,
+        name TEXT NOT NULL,
         email TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL,
-        role TEXT DEFAULT 'user',
+        phone TEXT,
+        address TEXT,
+        password TEXT NOT NULL,
+        role TEXT DEFAULT 'customer',
+        profile_picture TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`);
 
@@ -389,6 +398,270 @@ app.post('/api/contact', (req, res) => {
         }
 
         res.json({ ticketId });
+    });
+});
+
+// Customer registration
+app.post('/api/register/customer', (req, res) => {
+    const { name, email, phone, address, password } = req.body;
+    
+    if (!name || !email || !phone || !password) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+    
+    // Check if user already exists
+    const existingUser = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
+    if (existingUser) {
+        return res.status(400).json({ message: 'User already exists with this email' });
+    }
+    
+    const stmt = db.prepare(`
+        INSERT INTO users (name, email, phone, address, password, role, profile_picture)
+        VALUES (?, ?, ?, ?, ?, 'customer', ?)
+    `);
+    
+    try {
+        const profilePic = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1e3c72&color=fff&size=200`;
+        const result = stmt.run(name, email, phone, address || null, password, profilePic);
+        res.json({ 
+            success: true, 
+            message: 'Customer registration successful!',
+            userId: result.lastInsertRowid
+        });
+    } catch (error) {
+        console.error('Error registering customer:', error);
+        res.status(500).json({ message: 'Registration failed' });
+    }
+});
+
+// Admin registration
+app.post('/api/register/admin', (req, res) => {
+    const { name, email, phone, department, password, adminCode } = req.body;
+    
+    if (!name || !email || !phone || !department || !password || !adminCode) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+    
+    // Verify admin code
+    if (adminCode !== 'SWASTIK2024') {
+        return res.status(400).json({ message: 'Invalid admin code' });
+    }
+    
+    // Check if user already exists
+    const existingUser = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
+    if (existingUser) {
+        return res.status(400).json({ message: 'User already exists with this email' });
+    }
+    
+    const stmt = db.prepare(`
+        INSERT INTO users (name, email, phone, address, password, role, profile_picture)
+        VALUES (?, ?, ?, ?, ?, 'admin', ?)
+    `);
+    
+    try {
+        const profilePic = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=dc3545&color=fff&size=200`;
+        const result = stmt.run(name, email, phone, department, password, profilePic);
+        res.json({ 
+            success: true, 
+            message: 'Admin registration successful!',
+            userId: result.lastInsertRowid
+        });
+    } catch (error) {
+        console.error('Error registering admin:', error);
+        res.status(500).json({ message: 'Registration failed' });
+    }
+});
+
+// Social login registration
+app.post('/api/register/social', (req, res) => {
+    const { name, email, profilePic, provider } = req.body;
+    
+    if (!name || !email || !provider) {
+        return res.status(400).json({ message: 'Name, email, and provider are required' });
+    }
+    
+    // Check if user already exists
+    const existingUser = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
+    if (existingUser) {
+        // User exists, log them in
+        const token = jwt.sign({ email, role: existingUser.role }, JWT_SECRET, { expiresIn: '24h' });
+        return res.json({ 
+            success: true, 
+            message: 'Login successful!',
+            token,
+            user: {
+                name: existingUser.name,
+                email: existingUser.email,
+                role: existingUser.role,
+                profilePic: existingUser.profile_picture
+            }
+        });
+    }
+    
+    const stmt = db.prepare(`
+        INSERT INTO users (name, email, phone, address, password, role, profile_picture)
+        VALUES (?, ?, ?, ?, ?, 'customer', ?)
+    `);
+    
+    try {
+        const result = stmt.run(name, email, null, null, 'social_login', profilePic);
+        const token = jwt.sign({ email, role: 'customer' }, JWT_SECRET, { expiresIn: '24h' });
+        res.json({ 
+            success: true, 
+            message: 'Registration successful!',
+            token,
+            user: {
+                name,
+                email,
+                role: 'customer',
+                profilePic
+            },
+            userId: result.lastInsertRowid
+        });
+    } catch (error) {
+        console.error('Error registering social user:', error);
+        res.status(500).json({ message: 'Registration failed' });
+    }
+});
+
+// Get user profile API
+app.get('/api/user-profile/:email', (req, res) => {
+    const { email } = req.params;
+    
+    if (!email) {
+        return res.status(400).json({ message: 'Email is required' });
+    }
+
+    // Demo user profiles based on email
+    const userProfiles = {
+        'customer@example.com': {
+            name: 'John Doe',
+            email: 'customer@example.com',
+            profilePic: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+            role: 'customer',
+            phone: '+91 9876543210',
+            address: '123 Customer Street, Mumbai'
+        },
+        'admin@swastiktransport.com': {
+            name: 'Admin User',
+            email: 'admin@swastiktransport.com',
+            profilePic: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+            role: 'admin',
+            phone: '+91 124 456 7890',
+            address: '123 Logistics Hub, Gurgaon'
+        },
+        'jane.smith@email.com': {
+            name: 'Jane Smith',
+            email: 'jane.smith@email.com',
+            profilePic: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+            role: 'customer',
+            phone: '+91 9876543211',
+            address: '456 Business Park, Delhi'
+        }
+    };
+
+    const userProfile = userProfiles[email.toLowerCase()];
+    
+    if (userProfile) {
+        res.json(userProfile);
+    } else {
+        // Generate default profile for any email
+        const defaultProfile = {
+            name: email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            email: email,
+            profilePic: `https://ui-avatars.com/api/?name=${encodeURIComponent(email.split('@')[0])}&background=1e3c72&color=fff&size=150`,
+            role: 'customer',
+            phone: '+91 9876543210',
+            address: 'Not provided'
+        };
+        res.json(defaultProfile);
+    }
+});
+app.post('/api/customer-login', (req, res) => {
+    const { email, password } = req.body;
+    
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email and password are required' });
+    }
+
+    // Check against database
+    const query = 'SELECT * FROM users WHERE email = ? AND role = "customer"';
+    db.get(query, [email], (err, user) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+
+        if (!user) {
+            return res.status(401).json({ message: "You don't have an account. Please register first." });
+        }
+
+        // Check password (in production, use bcrypt)
+        if (user.password !== password && user.password !== 'social_login') {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        const token = jwt.sign({ email, role: 'customer' }, JWT_SECRET, { expiresIn: '24h' });
+        res.json({ 
+            message: 'Login successful', 
+            token,
+            user: { 
+                email: user.email, 
+                name: user.name, 
+                role: user.role,
+                profilePic: user.profile_picture
+            }
+        });
+    });
+});
+
+app.post('/api/admin-login', (req, res) => {
+    const { username, password } = req.body;
+    
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Username and password are required' });
+    }
+
+    // Check against database
+    const query = 'SELECT * FROM users WHERE username = ? AND role = "admin"';
+    db.get(query, [username], async (err, user) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid username or password' });
+        }
+
+        try {
+            const isValidPassword = await bcrypt.compare(password, user.password_hash);
+            if (isValidPassword) {
+                const token = jwt.sign({ 
+                    id: user.id, 
+                    username: user.username, 
+                    role: user.role 
+                }, JWT_SECRET, { expiresIn: '8h' });
+                
+                res.json({ 
+                    message: 'Admin login successful', 
+                    token,
+                    user: { 
+                        id: user.id, 
+                        username: user.username, 
+                        email: user.email, 
+                        role: user.role,
+                        name: 'Admin User',
+                        profilePic: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'
+                    }
+                });
+            } else {
+                res.status(401).json({ message: 'Invalid username or password' });
+            }
+        } catch (error) {
+            console.error('Password comparison error:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
     });
 });
 

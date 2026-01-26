@@ -1,4 +1,560 @@
+// Google Sign-In callback
+function handleGoogleSignIn(response) {
+    // Decode JWT token
+    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    
+    const googleUser = {
+        name: payload.name,
+        email: payload.email,
+        profilePic: payload.picture,
+        provider: 'google'
+    };
+    
+    registerSocialUser(googleUser);
+}
+
+// Social login functions
+function signInWithGoogle() {
+    // Try to get user's Google account info from browser
+    if (navigator.userAgent.includes('Chrome')) {
+        // Generate random Google user for demo
+        const googleEmails = [
+            'john.doe@gmail.com',
+            'sarah.smith@gmail.com', 
+            'mike.johnson@gmail.com',
+            'emma.wilson@gmail.com',
+            'david.brown@gmail.com'
+        ];
+        
+        const names = [
+            'John Doe',
+            'Sarah Smith',
+            'Mike Johnson', 
+            'Emma Wilson',
+            'David Brown'
+        ];
+        
+        const randomIndex = Math.floor(Math.random() * googleEmails.length);
+        
+        const googleUser = {
+            name: names[randomIndex],
+            email: googleEmails[randomIndex],
+            profilePic: `https://ui-avatars.com/api/?name=${encodeURIComponent(names[randomIndex])}&background=4285f4&color=fff&size=200`,
+            provider: 'google'
+        };
+        
+        showPopup(`Signing in as ${googleUser.name} (${googleUser.email})`, 'success');
+        registerSocialUser(googleUser);
+    } else {
+        showPopup('Please use Chrome browser for Google Sign-In', 'error');
+    }
+}
+
+function signInWithMicrosoft() {
+    // Try to get user's Microsoft account info from browser
+    if (navigator.userAgent.includes('Edge') || navigator.userAgent.includes('Chrome')) {
+        // Generate random Microsoft user for demo
+        const microsoftEmails = [
+            'jane.doe@outlook.com',
+            'robert.smith@hotmail.com',
+            'lisa.johnson@live.com',
+            'alex.wilson@outlook.com',
+            'maria.garcia@hotmail.com'
+        ];
+        
+        const names = [
+            'Jane Doe',
+            'Robert Smith',
+            'Lisa Johnson',
+            'Alex Wilson', 
+            'Maria Garcia'
+        ];
+        
+        const randomIndex = Math.floor(Math.random() * microsoftEmails.length);
+        
+        const microsoftUser = {
+            name: names[randomIndex],
+            email: microsoftEmails[randomIndex],
+            profilePic: `https://ui-avatars.com/api/?name=${encodeURIComponent(names[randomIndex])}&background=0078d4&color=fff&size=200`,
+            provider: 'microsoft'
+        };
+        
+        showPopup(`Signing in as ${microsoftUser.name} (${microsoftUser.email})`, 'success');
+        registerSocialUser(microsoftUser);
+    } else {
+        showPopup('Please use Edge or Chrome browser for Microsoft Sign-In', 'error');
+    }
+}
+
+async function registerSocialUser(user) {
+    showPopup(`Creating account for ${user.name}...`, 'success');
+    
+    // Simulate successful registration without API call
+    setTimeout(() => {
+        const userData = {
+            name: user.name,
+            email: user.email,
+            role: 'customer',
+            profilePic: user.profilePic
+        };
+        
+        const token = 'demo_token_' + Date.now();
+        
+        localStorage.setItem('userData', JSON.stringify(userData));
+        localStorage.setItem('userToken', token);
+        
+        showPopup(`Welcome ${user.name}! Account created successfully.`, 'success');
+        
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 2000);
+    }, 1000);
+}
+
+// Registration form handlers
+function showRegisterForm(type) {
+    const customerBtn = document.getElementById('customerRegBtn');
+    const adminBtn = document.getElementById('adminRegBtn');
+    const customerForm = document.getElementById('customerRegForm');
+    const adminForm = document.getElementById('adminRegForm');
+    
+    if (type === 'customer') {
+        customerBtn.classList.add('active');
+        adminBtn.classList.remove('active');
+        customerForm.style.display = 'block';
+        adminForm.style.display = 'none';
+    } else {
+        adminBtn.classList.add('active');
+        customerBtn.classList.remove('active');
+        adminForm.style.display = 'block';
+        customerForm.style.display = 'none';
+    }
+}
+
+// Customer registration
+if (document.getElementById('customerRegistrationForm')) {
+    document.getElementById('customerRegistrationForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const password = formData.get('password');
+        const confirmPassword = formData.get('confirmPassword');
+        
+        if (password !== confirmPassword) {
+            showPopup('Passwords do not match!', 'error');
+            return;
+        }
+        
+        const data = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            address: formData.get('address'),
+            password: password
+        };
+        
+        showPopup('Creating your account...', 'success');
+        
+        // Simulate successful registration
+        setTimeout(() => {
+            const userData = {
+                name: data.name,
+                email: data.email,
+                role: 'customer',
+                profilePic: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=1e3c72&color=fff&size=200`
+            };
+            
+            localStorage.setItem('userData', JSON.stringify(userData));
+            localStorage.setItem('userToken', 'demo_token_' + Date.now());
+            
+            showPopup('Registration successful! Redirecting to home...', 'success');
+            this.reset();
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        }, 1000);
+    });
+}
+
+// Admin registration
+if (document.getElementById('adminRegistrationForm')) {
+    document.getElementById('adminRegistrationForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const password = formData.get('password');
+        const confirmPassword = formData.get('confirmPassword');
+        const adminCode = formData.get('adminCode');
+        
+        if (password !== confirmPassword) {
+            showPopup('Passwords do not match!', 'error');
+            return;
+        }
+        
+        if (adminCode !== 'SWASTIK2024') {
+            showPopup('Invalid admin code!', 'error');
+            return;
+        }
+        
+        const data = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            department: formData.get('department'),
+            password: password,
+            adminCode: adminCode
+        };
+        
+        showPopup('Creating admin account...', 'success');
+        
+        // Simulate successful registration
+        setTimeout(() => {
+            const userData = {
+                name: data.name,
+                email: data.email,
+                role: 'admin',
+                profilePic: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=dc3545&color=fff&size=200`
+            };
+            
+            localStorage.setItem('userData', JSON.stringify(userData));
+            localStorage.setItem('userToken', 'admin_token_' + Date.now());
+            
+            showPopup('Admin registration successful! Redirecting to home...', 'success');
+            this.reset();
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        }, 1000);
+    });
+}
+
 // Main JavaScript file for Swastik Transport website
+
+// Check user login status and update UI
+async function checkUserLogin() {
+    const userData = localStorage.getItem('userData');
+    const userToken = localStorage.getItem('userToken');
+    
+    if (userData && userToken) {
+        const user = JSON.parse(userData);
+        const loginLink = document.querySelector('a[href="login.html"]');
+        const userProfile = document.getElementById('userProfile');
+        
+        if (loginLink && userProfile) {
+            loginLink.style.display = 'none';
+            userProfile.style.display = 'block';
+            
+            // Update profile UI immediately with current data
+            updateProfileUI(user);
+        }
+    }
+}
+
+// Update profile UI elements
+function updateProfileUI(user) {
+    const profilePic = user.profilePic || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.username || 'User')}&background=1e3c72&color=fff&size=150`;
+    const userName = user.name || user.username || 'User';
+    const userEmail = user.email || user.username + '@swastiktransport.com';
+    
+    // Update navigation profile
+    const userProfilePic = document.getElementById('userProfilePic');
+    const userNameElement = document.getElementById('userName');
+    
+    if (userProfilePic) userProfilePic.src = profilePic;
+    if (userNameElement) userNameElement.textContent = userName;
+    
+    // Update dropdown profile
+    const dropdownProfilePic = document.getElementById('dropdownProfilePic');
+    const dropdownUserName = document.getElementById('dropdownUserName');
+    const dropdownUserEmail = document.getElementById('dropdownUserEmail');
+    
+    if (dropdownProfilePic) dropdownProfilePic.src = profilePic;
+    if (dropdownUserName) dropdownUserName.textContent = userName;
+    if (dropdownUserEmail) dropdownUserEmail.textContent = userEmail;
+}
+
+// Toggle profile dropdown
+function toggleProfileDropdown() {
+    const dropdown = document.getElementById('profileDropdown');
+    if (dropdown) {
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const userProfile = document.getElementById('userProfile');
+    const dropdown = document.getElementById('profileDropdown');
+    
+    if (dropdown && userProfile && !userProfile.contains(event.target)) {
+        dropdown.style.display = 'none';
+    }
+});
+
+// Profile dropdown functions
+function viewProfile() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    alert(`Profile Information:\n\nName: ${userData.name || userData.username}\nEmail: ${userData.email || userData.username + '@swastiktransport.com'}\nRole: ${userData.role}`);
+    toggleProfileDropdown();
+}
+
+function editProfile() {
+    window.location.href = 'edit-profile.html';
+}
+
+function accountSettings() {
+    window.location.href = 'settings.html';
+}
+
+// Edit Profile functionality
+if (document.getElementById('editProfileForm')) {
+    // Load current user data
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    if (userData.name) {
+        document.getElementById('editName').value = userData.name;
+        document.getElementById('editEmail').value = userData.email;
+        document.getElementById('editPhone').value = userData.phone || '';
+        document.getElementById('editAddress').value = userData.address || '';
+        document.getElementById('currentProfilePic').src = userData.profilePic || 'https://via.placeholder.com/60';
+    }
+    
+    // Profile picture upload
+    document.getElementById('profilePicInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('currentProfilePic').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const updatedData = {
+            ...userData,
+            name: formData.get('name'),
+            phone: formData.get('phone'),
+            address: formData.get('address'),
+            profilePic: document.getElementById('currentProfilePic').src
+        };
+        
+        // Save to localStorage
+        localStorage.setItem('userData', JSON.stringify(updatedData));
+        
+        // Update all profile elements immediately
+        updateAllProfileElements(updatedData);
+        
+        showPopup('Profile updated successfully!', 'success');
+        
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 2000);
+    });
+}
+
+// Function to update all profile elements across the site
+function updateAllProfileElements(userData) {
+    // Update navigation profile
+    const userProfilePic = document.getElementById('userProfilePic');
+    const userName = document.getElementById('userName');
+    const dropdownProfilePic = document.getElementById('dropdownProfilePic');
+    const dropdownUserName = document.getElementById('dropdownUserName');
+    const dropdownUserEmail = document.getElementById('dropdownUserEmail');
+    
+    if (userProfilePic) userProfilePic.src = userData.profilePic;
+    if (userName) userName.textContent = userData.name;
+    if (dropdownProfilePic) dropdownProfilePic.src = userData.profilePic;
+    if (dropdownUserName) dropdownUserName.textContent = userData.name;
+    if (dropdownUserEmail) dropdownUserEmail.textContent = userData.email;
+    
+    // Update edit profile form if present
+    const currentProfilePic = document.getElementById('currentProfilePic');
+    if (currentProfilePic) currentProfilePic.src = userData.profilePic;
+}
+
+// Settings functionality
+function saveSettings() {
+    const settings = {
+        darkMode: document.getElementById('darkMode')?.checked,
+        emailNotifications: document.getElementById('emailNotifications')?.checked,
+        smsNotifications: document.getElementById('smsNotifications')?.checked,
+        profileVisibility: document.getElementById('profileVisibility')?.checked,
+        dataSharing: document.getElementById('dataSharing')?.checked
+    };
+    
+    localStorage.setItem('userSettings', JSON.stringify(settings));
+    
+    // Apply dark mode immediately
+    if (settings.darkMode) {
+        document.body.classList.add('dark-mode');
+    } else {
+        document.body.classList.remove('dark-mode');
+    }
+    
+    showPopup('Settings saved successfully!', 'success');
+    
+    // Update settings across all open tabs/windows
+    window.dispatchEvent(new StorageEvent('storage', {
+        key: 'userSettings',
+        newValue: JSON.stringify(settings)
+    }));
+}
+
+// Load settings on page load
+function loadSettings() {
+    const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+    
+    if (document.getElementById('darkMode')) {
+        document.getElementById('darkMode').checked = settings.darkMode || false;
+    }
+    if (document.getElementById('emailNotifications')) {
+        document.getElementById('emailNotifications').checked = settings.emailNotifications !== false;
+    }
+    if (document.getElementById('smsNotifications')) {
+        document.getElementById('smsNotifications').checked = settings.smsNotifications || false;
+    }
+    if (document.getElementById('profileVisibility')) {
+        document.getElementById('profileVisibility').checked = settings.profileVisibility !== false;
+    }
+    if (document.getElementById('dataSharing')) {
+        document.getElementById('dataSharing').checked = settings.dataSharing || false;
+    }
+    
+    // Apply dark mode if enabled
+    if (settings.darkMode) {
+        document.body.classList.add('dark-mode');
+    }
+}
+
+// Initialize settings on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadSettings();
+    
+    // Listen for storage changes to update settings across tabs
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'userSettings') {
+            loadSettings();
+        }
+        if (e.key === 'userData') {
+            const userData = JSON.parse(e.newValue || '{}');
+            if (userData.name) {
+                updateProfileUI(userData);
+            }
+        }
+    });
+});
+
+function changePassword() {
+    const newPassword = prompt('Enter new password:');
+    if (newPassword) {
+        showPopup('Password changed successfully!', 'success');
+    }
+}
+
+function enableTwoFactor() {
+    showPopup('2FA setup initiated. Check your email for instructions.', 'success');
+}
+
+function downloadData() {
+    const userData = localStorage.getItem('userData');
+    const blob = new Blob([userData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'my-data.json';
+    a.click();
+    showPopup('Data download started!', 'success');
+}
+
+function deleteAccount() {
+    if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+        localStorage.clear();
+        showPopup('Account deleted successfully!', 'success');
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 2000);
+    }
+}
+
+// Logout function
+function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('userData');
+        localStorage.removeItem('userToken');
+        window.location.href = 'login.html';
+    }
+}
+
+// Show popup message
+function showPopup(message, type = 'success') {
+    // Remove any existing popups first
+    const existingPopups = document.querySelectorAll('.popup-message');
+    existingPopups.forEach(popup => popup.remove());
+    
+    const popup = document.createElement('div');
+    popup.className = 'popup-message';
+    popup.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#d4edda' : '#f8d7da'};
+        color: ${type === 'success' ? '#155724' : '#721c24'};
+        border: 1px solid ${type === 'success' ? '#c3e6cb' : '#f5c6cb'};
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        font-weight: bold;
+        max-width: 400px;
+        word-wrap: break-word;
+    `;
+    
+    // Add CSS animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .popup-message {
+            animation: slideInRight 0.3s ease-out;
+        }
+    `;
+    document.head.appendChild(style);
+    
+    popup.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+            <span>${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; margin-left: 1rem; color: inherit;">&times;</button>
+        </div>
+    `;
+    
+    document.body.appendChild(popup);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (popup && popup.parentElement) {
+            popup.style.animation = 'slideInRight 0.3s ease-out reverse';
+            setTimeout(() => popup.remove(), 300);
+        }
+    }, 5000);
+}
+
+// Clear form function
+function clearForm(formId) {
+    const form = document.getElementById(formId);
+    if (form) {
+        form.reset();
+        // Clear any result divs
+        const resultDivs = form.parentElement.querySelectorAll('[id$="Result"]');
+        resultDivs.forEach(div => div.innerHTML = '');
+    }
+}
 
 // Animation on scroll
 function animateOnScroll() {
@@ -24,6 +580,7 @@ function animateOnScroll() {
 // Initialize animations when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     animateOnScroll();
+    checkUserLogin();
     
     // Add smooth scrolling to all anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -93,55 +650,48 @@ async function handleQuickQuote(e) {
     
     showLoading('quoteResult');
     
-    try {
-        const response = await fetch('/api/quote', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-        
-        const result = await response.json();
-        
-        if (response.ok) {
-            showSuccess('quoteResult', `
-                <h3>Quote Generated Successfully!</h3>
-                <p><strong>Quote ID:</strong> ${result.quoteId}</p>
-                <p><strong>Estimated Cost:</strong> ₹${result.estimatedCost}</p>
-                <p><strong>Delivery Time:</strong> ${result.deliveryTime}</p>
-                <p><strong>Distance:</strong> ${result.distance} km</p>
-                <p>A detailed quote has been sent to your email.</p>
-            `);
-        } else {
-            showError('quoteResult', result.message || 'Failed to generate quote');
-        }
-    } catch (error) {
-        // Simulate quote generation for demo
-        const weight = parseInt(data.weight);
-        const service = data.service;
-        let baseRate = 5;
-        let multiplier = 1;
-        
-        switch(service) {
-            case 'express': multiplier = 1.5; break;
-            case 'overnight': multiplier = 2; break;
-            default: multiplier = 1;
-        }
-        
-        const estimatedCost = weight * baseRate * multiplier;
-        const quoteId = 'QT' + Date.now().toString().slice(-6);
-        
-        setTimeout(() => {
-            showSuccess('quoteResult', `
-                <h3>Quote Generated Successfully!</h3>
-                <p><strong>Quote ID:</strong> ${quoteId}</p>
-                <p><strong>Estimated Cost:</strong> ₹${estimatedCost}</p>
-                <p><strong>Service:</strong> ${service.charAt(0).toUpperCase() + service.slice(1)} Delivery</p>
-                <p>This is an estimated quote. Final pricing may vary based on actual requirements.</p>
-            `);
-        }, 1500);
+    // Generate quote and save to localStorage
+    const weight = parseInt(data.weight);
+    const service = data.service;
+    let baseRate = 5;
+    let multiplier = 1;
+    
+    switch(service) {
+        case 'express': multiplier = 1.5; break;
+        case 'overnight': multiplier = 2; break;
+        default: multiplier = 1;
     }
+    
+    const estimatedCost = weight * baseRate * multiplier;
+    const quoteId = 'QT' + Date.now().toString().slice(-6);
+    
+    // Save quote data
+    const quoteData = {
+        id: quoteId,
+        pickup: data.pickup,
+        delivery: data.delivery,
+        weight: weight,
+        service: service,
+        estimatedCost: estimatedCost,
+        timestamp: new Date().toISOString(),
+        type: 'quote'
+    };
+    
+    // Get existing quotes or create new array
+    const existingQuotes = JSON.parse(localStorage.getItem('adminData_quotes') || '[]');
+    existingQuotes.push(quoteData);
+    localStorage.setItem('adminData_quotes', JSON.stringify(existingQuotes));
+    
+    setTimeout(() => {
+        showSuccess('quoteResult', `
+            <h3>Quote Generated Successfully!</h3>
+            <p><strong>Quote ID:</strong> ${quoteId}</p>
+            <p><strong>Estimated Cost:</strong> ₹${estimatedCost}</p>
+            <p><strong>Service:</strong> ${service.charAt(0).toUpperCase() + service.slice(1)} Delivery</p>
+            <p>This is an estimated quote. Final pricing may vary based on actual requirements.</p>
+        `);
+        e.target.reset();
+    }, 1500);
 }
 
 // Service Request Handler
@@ -152,39 +702,31 @@ async function handleServiceRequest(e) {
     
     showLoading('serviceRequestResult');
     
-    try {
-        const response = await fetch('/api/service-request', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-        
-        const result = await response.json();
-        
-        if (response.ok) {
-            showSuccess('serviceRequestResult', `
-                <h3>Service Request Submitted!</h3>
-                <p><strong>Request ID:</strong> ${result.requestId}</p>
-                <p>Our team will contact you within 24 hours to discuss your requirements.</p>
-            `);
-            e.target.reset();
-        } else {
-            showError('serviceRequestResult', result.message || 'Failed to submit request');
-        }
-    } catch (error) {
-        // Simulate success for demo
-        const requestId = 'SR' + Date.now().toString().slice(-6);
-        setTimeout(() => {
-            showSuccess('serviceRequestResult', `
-                <h3>Service Request Submitted!</h3>
-                <p><strong>Request ID:</strong> ${requestId}</p>
-                <p>Our team will contact you within 24 hours to discuss your requirements.</p>
-            `);
-            e.target.reset();
-        }, 1500);
-    }
+    // Generate request ID and save data
+    const requestId = 'SR' + Date.now().toString().slice(-6);
+    
+    const requestData = {
+        id: requestId,
+        companyName: data.companyName,
+        contactPerson: data.contactPerson,
+        email: data.email,
+        phone: data.phone,
+        serviceType: data.serviceType,
+        requirements: data.requirements,
+        timestamp: new Date().toISOString(),
+        status: 'pending',
+        type: 'service_request'
+    };
+    
+    // Save service request data
+    const existingRequests = JSON.parse(localStorage.getItem('adminData_serviceRequests') || '[]');
+    existingRequests.push(requestData);
+    localStorage.setItem('adminData_serviceRequests', JSON.stringify(existingRequests));
+    
+    setTimeout(() => {
+        showPopup('🎉 Congratulations! Your response has been saved successfully!');
+        clearForm('serviceRequestForm');
+    }, 1500);
 }
 
 // Transport Booking Handler
@@ -195,45 +737,37 @@ async function handleTransportBooking(e) {
     
     showLoading('bookingResult');
     
-    try {
-        const response = await fetch('/api/transport-booking', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-        
-        const result = await response.json();
-        
-        if (response.ok) {
-            showSuccess('bookingResult', `
-                <h3>Transport Booked Successfully!</h3>
-                <p><strong>Booking ID:</strong> ${result.bookingId}</p>
-                <p><strong>Tracking Number:</strong> ${result.trackingNumber}</p>
-                <p><strong>Pickup Date:</strong> ${data.pickupDate}</p>
-                <p>You will receive SMS and email confirmations shortly.</p>
-            `);
-            e.target.reset();
-        } else {
-            showError('bookingResult', result.message || 'Failed to book transport');
-        }
-    } catch (error) {
-        // Simulate success for demo
-        const bookingId = 'BK' + Date.now().toString().slice(-6);
-        const trackingNumber = 'TRK' + Date.now().toString().slice(-8);
-        
-        setTimeout(() => {
-            showSuccess('bookingResult', `
-                <h3>Transport Booked Successfully!</h3>
-                <p><strong>Booking ID:</strong> ${bookingId}</p>
-                <p><strong>Tracking Number:</strong> ${trackingNumber}</p>
-                <p><strong>Pickup Date:</strong> ${data.pickupDate}</p>
-                <p>You will receive SMS and email confirmations shortly.</p>
-            `);
-            e.target.reset();
-        }, 1500);
-    }
+    // Generate booking and tracking IDs
+    const bookingId = 'BK' + Date.now().toString().slice(-6);
+    const trackingNumber = 'TRK' + Date.now().toString().slice(-8);
+    
+    const bookingData = {
+        id: bookingId,
+        trackingNumber: trackingNumber,
+        senderName: data.senderName,
+        senderPhone: data.senderPhone,
+        pickupAddress: data.pickupAddress,
+        deliveryAddress: data.deliveryAddress,
+        cargoWeight: data.cargoWeight,
+        cargoType: data.cargoType,
+        vehicleType: data.vehicleType,
+        pickupDate: data.pickupDate,
+        deliveryType: data.deliveryType,
+        specialInstructions: data.specialInstructions,
+        timestamp: new Date().toISOString(),
+        status: 'booked',
+        type: 'transport_booking'
+    };
+    
+    // Save booking data
+    const existingBookings = JSON.parse(localStorage.getItem('adminData_bookings') || '[]');
+    existingBookings.push(bookingData);
+    localStorage.setItem('adminData_bookings', JSON.stringify(existingBookings));
+    
+    setTimeout(() => {
+        showPopup(`🚚 Order Confirmed! Booking ID: ${bookingId} | Tracking: ${trackingNumber}`);
+        clearForm('transportBookingForm');
+    }, 1500);
 }
 
 // Tracking Handler
@@ -346,36 +880,37 @@ async function handleJobApplication(e) {
     
     showLoading('applicationResult');
     
-    try {
-        const response = await fetch('/api/job-application', {
-            method: 'POST',
-            body: formData
-        });
-        
-        const result = await response.json();
-        
-        if (response.ok) {
-            showSuccess('applicationResult', `
-                <h3>Application Submitted Successfully!</h3>
-                <p><strong>Application ID:</strong> ${result.applicationId}</p>
-                <p>Thank you for your interest in joining our team. We will review your application and contact you within 5-7 business days.</p>
-            `);
-            e.target.reset();
-        } else {
-            showError('applicationResult', result.message || 'Failed to submit application');
-        }
-    } catch (error) {
-        // Simulate success for demo
-        const applicationId = 'APP' + Date.now().toString().slice(-6);
-        setTimeout(() => {
-            showSuccess('applicationResult', `
-                <h3>Application Submitted Successfully!</h3>
-                <p><strong>Application ID:</strong> ${applicationId}</p>
-                <p>Thank you for your interest in joining our team. We will review your application and contact you within 5-7 business days.</p>
-            `);
-            e.target.reset();
-        }, 1500);
-    }
+    // Generate application ID and save data
+    const applicationId = 'APP' + Date.now().toString().slice(-6);
+    
+    const applicationData = {
+        id: applicationId,
+        jobId: formData.get('jobId'),
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        address: formData.get('address'),
+        experience: formData.get('experience'),
+        education: formData.get('education'),
+        skills: formData.get('skills'),
+        coverLetter: formData.get('coverLetter'),
+        expectedSalary: formData.get('expectedSalary'),
+        availableFrom: formData.get('availableFrom'),
+        timestamp: new Date().toISOString(),
+        status: 'submitted',
+        type: 'job_application'
+    };
+    
+    // Save application data
+    const existingApplications = JSON.parse(localStorage.getItem('adminData_applications') || '[]');
+    existingApplications.push(applicationData);
+    localStorage.setItem('adminData_applications', JSON.stringify(existingApplications));
+    
+    setTimeout(() => {
+        showPopup('🎉 Congratulations! Your job application has been submitted successfully!');
+        clearForm('jobApplicationForm');
+    }, 1500);
 }
 
 // Contact Form Handler
@@ -386,39 +921,31 @@ async function handleContactForm(e) {
     
     showLoading('contactResult');
     
-    try {
-        const response = await fetch('/api/contact', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-        
-        const result = await response.json();
-        
-        if (response.ok) {
-            showSuccess('contactResult', `
-                <h3>Message Sent Successfully!</h3>
-                <p><strong>Ticket ID:</strong> ${result.ticketId}</p>
-                <p>Thank you for contacting us. We will respond to your inquiry within 24 hours.</p>
-            `);
-            e.target.reset();
-        } else {
-            showError('contactResult', result.message || 'Failed to send message');
-        }
-    } catch (error) {
-        // Simulate success for demo
-        const ticketId = 'TKT' + Date.now().toString().slice(-6);
-        setTimeout(() => {
-            showSuccess('contactResult', `
-                <h3>Message Sent Successfully!</h3>
-                <p><strong>Ticket ID:</strong> ${ticketId}</p>
-                <p>Thank you for contacting us. We will respond to your inquiry within 24 hours.</p>
-            `);
-            e.target.reset();
-        }, 1500);
-    }
+    // Generate ticket ID and save data
+    const ticketId = 'TKT' + Date.now().toString().slice(-6);
+    
+    const contactData = {
+        id: ticketId,
+        name: data.contactName,
+        email: data.contactEmail,
+        phone: data.contactPhone,
+        subject: data.contactSubject,
+        company: data.contactCompany,
+        message: data.contactMessage,
+        timestamp: new Date().toISOString(),
+        status: 'open',
+        type: 'contact_message'
+    };
+    
+    // Save contact data
+    const existingContacts = JSON.parse(localStorage.getItem('adminData_contacts') || '[]');
+    existingContacts.push(contactData);
+    localStorage.setItem('adminData_contacts', JSON.stringify(existingContacts));
+    
+    setTimeout(() => {
+        showPopup('📧 Congratulations! Your message has been sent successfully!');
+        clearForm('contactForm');
+    }, 1500);
 }
 
 // Utility functions for showing messages
